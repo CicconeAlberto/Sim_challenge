@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<root>
+ <tabbed_widget name="Main Window" parent="main_window">
+  <Tab containers="1" tab_name="Giro">
+   <Container>
+    <DockSplitter count="1" orientation="-" sizes="1">
+     <DockSplitter count="4" orientation="|" sizes="0.250359;0.249641;0.250359;0.249641">
+      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+       <DockArea name="Velocità">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-1.553515" left="0.000000" right="289.900178" top="63.694132"/>
+         <limitY/>
+         <curve color="#9467bd" name="Speed"/>
+        </plot>
+       </DockArea>
+       <DockArea name="Pedale e freni">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-4.043464" left="0.000000" right="289.900178" top="165.782025"/>
+         <limitY/>
+         <curve color="#1ac938" name="/sim_in/accelerator_pedal_cmd"/>
+         <curve color="#ff7f0e" name="/sim_in/brake_fl_cmd"/>
+         <curve color="#f14cc1" name="/sim_in/brake_fr_cmd"/>
+         <curve color="#9467bd" name="/sim_in/brake_rl_cmd"/>
+         <curve color="#17becf" name="/sim_in/brake_rr_cmd"/>
+        </plot>
+       </DockArea>
+      </DockSplitter>
+      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+       <DockArea name="Sterzo">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-0.184518" left="0.000000" right="289.900178" top="0.363037"/>
+         <limitY/>
+         <curve color="#bcbd22" name="/sim_in/steering_cmd"/>
+         <curve color="#1f77b4" name="/sim_out/steering_wheel_angle"/>
+        </plot>
+       </DockArea>
+       <DockArea name="Dinamica laterale">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-16.603676" left="0.000000" right="289.900178" top="13.011614"/>
+         <limitY/>
+         <curve color="#1f77b4" name="/sim_out/ay"/>
+         <curve color="#1ac938" name="/sim_out/omegaz"/>
+        </plot>
+       </DockArea>
+      </DockSplitter>
+      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+       <DockArea name="Stabilità">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-0.495855" left="0.000000" right="289.900178" top="1.621203"/>
+         <limitY/>
+         <curve color="#d62728" name="/sim_out/beta"/>
+         <curve color="#d62728" name="/sim_out/vy"/>
+        </plot>
+       </DockArea>
+       <DockArea name="Ruote">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-5.039280" left="0.000000" right="289.900178" top="206.610477"/>
+         <limitY/>
+         <curve color="#ff7f0e" name="/sim_out/wheel_fl"/>
+         <curve color="#f14cc1" name="/sim_out/wheel_fr"/>
+         <curve color="#9467bd" name="/sim_out/wheel_rl"/>
+         <curve color="#17becf" name="/sim_out/wheel_rr"/>
+        </plot>
+       </DockArea>
+      </DockSplitter>
+      <DockSplitter count="2" orientation="-" sizes="0.5;0.5">
+       <DockArea name="Percorso">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="XYPlot">
+         <range bottom="-872.856772" left="-294.845984" right="1475.733390" top="1461.088767"/>
+         <limitY/>
+         <curve color="#17becf" curve_x="/sim_out/x" curve_y="/sim_out/y" name="/sim_out/[x;y]"/>
+        </plot>
+       </DockArea>
+       <DockArea name="Motore">
+        <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
+         <range bottom="-200.000000" left="0.000000" right="289.900178" top="8200.000000"/>
+         <limitY/>
+         <curve color="#1ac938" name="/sim_out/engine_rpm"/>
+         <curve color="#f14cc1" name="/sim_out/gear_data"/>
+        </plot>
+       </DockArea>
+      </DockSplitter>
+     </DockSplitter>
+    </DockSplitter>
+   </Container>
+  </Tab>
+  <currentTabIndex index="0"/>
+ </tabbed_widget>
+ <use_relative_time_offset enabled="1"/>
+ <streaming_buffer_size value="30"/>
+ <!-- - - - - - - - - - - - - - - -->
+ <!-- - - - - - - - - - - - - - - -->
+ <Plugins>
+  <plugin ID="DataLoad CSV">
+   <parameters delimiter="0" skip_rows="0" time_axis=""/>
+  </plugin>
+  <plugin ID="DataLoad MCAP"/>
+  <plugin ID="DataLoad ROS2 bags">
+   <use_header_stamp value="false"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+   <boolean_strings_to_number value="true"/>
+   <remove_suffix_from_strings value="true"/>
+   <selected_topics value=""/>
+  </plugin>
+  <plugin ID="DataLoad ULog"/>
+  <plugin ID="Foxglove ROS2 Bridge">
+   <foxglove_client clamp_large_arrays="0" max_array_size="500" url="ws://127.0.0.1:8765" use_timestamp="0">
+    <topics/>
+   </foxglove_client>
+  </plugin>
+  <plugin ID="PlotJuggler Bridge">
+   <websocket_client clamp_large_arrays="0" max_array_size="500" url="ws://127.0.0.1:9090" use_timestamp="0">
+    <topics/>
+   </websocket_client>
+  </plugin>
+  <plugin ID="ROS2 Topic Subscriber">
+   <use_header_stamp value="false"/>
+   <discard_large_arrays value="true"/>
+   <max_array_size value="100"/>
+   <boolean_strings_to_number value="true"/>
+   <remove_suffix_from_strings value="true"/>
+   <selected_topics value=""/>
+  </plugin>
+  <plugin ID="UDP Server"/>
+  <plugin ID="WebSocket Server"/>
+  <plugin ID="ZMQ Subscriber"/>
+  <plugin ID="CSV/Parquet Exporter"/>
+  <plugin ID="Fast Fourier Transform"/>
+  <plugin ID="Quaternion to RPY"/>
+  <plugin ID="Reactive Script Editor">
+   <library code="--[[ Helper function to create a series from arrays
+
+ new_series: a series previously created with ScatterXY.new(name)
+ prefix:     prefix of the timeseries, before the index of the array
+ suffix_X:   suffix to complete the name of the series containing the X value. If [nil], use the index of the array.
+ suffix_Y:   suffix to complete the name of the series containing the Y value
+ timestamp:   usually the tracker_time variable
+              
+ Example:
+ 
+ Assuming we have multiple series in the form:
+ 
+   /trajectory/node.{X}/position/x
+   /trajectory/node.{X}/position/y
+   
+ where {N} is the index of the array (integer). We can create a reactive series from the array with:
+ 
+   new_series = ScatterXY.new(&quot;my_trajectory&quot;) 
+   CreateSeriesFromArray( new_series, &quot;/trajectory/node&quot;, &quot;position/x&quot;, &quot;position/y&quot;, tracker_time );
+--]]
+
+function CreateSeriesFromArray( new_series, prefix, suffix_X, suffix_Y, timestamp )
+  
+  --- clear previous values
+  new_series:clear()
+  
+  --- Append points to new_series
+  index = 0
+  while(true) do
+
+    x = index;
+    -- if not nil, get the X coordinate from a series
+    if suffix_X ~= nil then 
+      series_x = TimeseriesView.find( string.format( &quot;%s.%d/%s&quot;, prefix, index, suffix_X) )
+      if series_x == nil then break end
+      x = series_x:atTime(timestamp)	 
+    end
+    
+    series_y = TimeseriesView.find( string.format( &quot;%s.%d/%s&quot;, prefix, index, suffix_Y) )
+    if series_y == nil then break end 
+    y = series_y:atTime(timestamp)
+    
+    new_series:push_back(x,y)
+    index = index+1
+  end
+end
+
+--[[ Similar to the built-in function GetSeriesNames(), but select only the names with a give prefix. --]]
+
+function GetSeriesNamesByPrefix(prefix)
+  -- GetSeriesNames(9 is a built-in function
+  all_names = GetSeriesNames()
+  filtered_names = {}
+  for i, name in ipairs(all_names)  do
+    -- check the prefix
+    if name:find(prefix, 1, #prefix) then
+      table.insert(filtered_names, name);
+    end
+  end
+  return filtered_names
+end
+
+--[[ Modify an existing series, applying offsets to all their X and Y values
+
+ series: an existing timeseries, obtained with TimeseriesView.find(name)
+ delta_x: offset to apply to each x value
+ delta_y: offset to apply to each y value 
+  
+--]]
+
+function ApplyOffsetInPlace(series, delta_x, delta_y)
+  -- use C++ indices, not Lua indices
+  for index=0, series:size()-1 do
+    x,y = series:at(index)
+    series:set(index, x + delta_x, y + delta_y)
+  end
+end
+"/>
+   <scripts/>
+  </plugin>
+  <plugin ID="ROS2 Topic Re-Publisher"/>
+ </Plugins>
+ <!-- - - - - - - - - - - - - - - -->
+ <!-- - - - - - - - - - - - - - - -->
+ <customMathEquations>
+  <snippet language="LUA" name="Speed">
+   <global></global>
+   <function>return math.sqrt(value*value + v2*v2)</function>
+   <linked_source>/sim_out/vx</linked_source>
+   <additional_sources>
+    <v1>/sim_out/vx</v1>
+    <v2>/sim_out/vy</v2>
+   </additional_sources>
+  </snippet>
+  <snippet language="LUA" name="Sliding">
+   <global></global>
+   <function>if (v3 + v4) &lt; 1 then return 0 end
+return (value + v2)/(v3 + v4) - 1</function>
+   <linked_source>/sim_out/wheel_rl</linked_source>
+   <additional_sources>
+    <v1>/sim_out/wheel_rl</v1>
+    <v2>/sim_out/wheel_rr</v2>
+    <v3>/sim_out/wheel_fl</v3>
+    <v4>/sim_out/wheel_fr</v4>
+   </additional_sources>
+  </snippet>
+ </customMathEquations>
+ <snippets/>
+ <colorMaps/>
+ <!-- - - - - - - - - - - - - - - -->
+</root>
